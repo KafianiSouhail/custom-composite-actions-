@@ -1,0 +1,15 @@
+name: Get & Install Cached Dependencies
+description: Caches and restores dependencies to speed up CI workflows.
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Dependencies
+      id: cache-deps
+      uses: actions/cache@v3
+      with:
+        key: node-deps-${{ hashFiles('**/package-lock.json') }}
+        path: node_modules
+    - name: Install Dependencies
+      if: steps.cache-deps.outputs.cache-hit != 'true'
+      run: npm ci
+      shell: bash
