@@ -1,5 +1,10 @@
 name: "get & Cache Dependencies"
 description: "Get and cache dependencies for your project"
+inputs:
+  cache-name:
+    description: cache name
+    required: false
+    default: 'deps-node'
 runs:
   using: "composite"
   steps:
@@ -8,7 +13,7 @@ runs:
     uses: actions/cache@v3
     with:
       path: node_modules
-      key: deps-node-${{ hashFiles('**/package-lock.json') }} 
+      key: ${{ inputs.cache-name }}-${{ hashFiles('**/package-lock.json') }} 
   - name: Install dependencies
     if: steps.restore-cache.outputs.cache-hit != 'true'
     run: npm ci
