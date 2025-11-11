@@ -1,0 +1,5 @@
+name: Deploy React App
+description: Deploy React App to AWS S3 Bucket
+runs:
+  using: 'node16'
+  main: 'main.js'
