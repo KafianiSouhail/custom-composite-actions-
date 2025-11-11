@@ -9,6 +9,10 @@ inputs:
     description: whether to cache dependencies
     required: false
     default: 'true'
+outputs:
+  isCached:
+    description: whether dependencies were restored from cache
+    value: ${{ steps.install-deps.outputs.cache-hit }}
 runs:
   using: "composite"
   steps:
@@ -20,6 +24,9 @@ runs:
       path: node_modules
       key: ${{ inputs.cache-name }}-${{ hashFiles('**/package-lock.json') }} 
   - name: Install dependencies
+    id: install-deps 
     if: steps.restore-cache.outputs.cache-hit != 'true' || inputs.should-cache == 'false'
-    run: npm ci
+    run: |
+      npm ci
+      echo "cache-hit=${{ inputs.should-cache }} >> $GITHUB_OUTPUT"
     shell: bash

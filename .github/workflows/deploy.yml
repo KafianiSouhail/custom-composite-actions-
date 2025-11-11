@@ -11,9 +11,12 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: get & Install dependencies
+        id: cache-deps
         uses: ./.github/actions/cache-deps
         with:
           should-cache: 'false'
+      - name: Print outpiut of previous step
+        run: echo "isCached = ${{ steps.cache-deps.outputs.isCached }}"
       - name: Lint code
         run: npm run lint
   test:
