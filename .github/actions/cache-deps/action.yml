@@ -5,16 +5,21 @@ inputs:
     description: cache name
     required: false
     default: 'deps-node'
+  should-cache:
+    description: whether to cache dependencies
+    required: false
+    default: 'true'
 runs:
   using: "composite"
   steps:
   - name: Restore cache
+    if: inputs.should-cache == 'true'
     id: restore-cache
     uses: actions/cache@v3
     with:
       path: node_modules
       key: ${{ inputs.cache-name }}-${{ hashFiles('**/package-lock.json') }} 
   - name: Install dependencies
-    if: steps.restore-cache.outputs.cache-hit != 'true'
+    if: steps.restore-cache.outputs.cache-hit != 'true' || inputs.should-cache == 'false'
     run: npm ci
     shell: bash
