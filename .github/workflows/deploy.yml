@@ -60,26 +60,27 @@ jobs:
       - name: Build website
         run: npm run build
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v1
         with:
           name: dist-files
           path: dist
   deploy:
     needs: build
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+     # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Get build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-files
-          path: ./dist
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
+
       - name: Output contents
         run: ls
   information:
