@@ -16,7 +16,7 @@ jobs:
         with:
           should-cache: 'false'
       - name: Print outpiut of previous step
-        run: echo "isCached = ${{ steps.cache-deps.outputs.isCached }}"
+        run: echo "isCached ${{ steps.cache-deps.outputs.isCached }}"
       - name: Lint code
         run: npm run lint
   test:
