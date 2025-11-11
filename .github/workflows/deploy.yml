@@ -62,17 +62,16 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          name: dist-files
           path: dist
   deploy:
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
      # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Get code
